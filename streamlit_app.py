@@ -90,15 +90,59 @@ name_data = grouped.get_group(name)
 # run the gaussian process regression
 x_future, x_full, y_full_mean, y_full_sigma  = run_gaussian_process_regression(name_data)
 
-tab1, tab2, tab3 = st.tabs(["Statistics", "Graph", "Predictions"])
-
+# recapitalise the name for output 
 display_name = name.capitalize()
 
+tab1, tab2, tab3 = st.tabs(["Statistics", "Graph", "Predictions"])
 with tab1:
     st.header(display_name+" statistics")
+    # get the stats for the selected name 
+    # check whether the name made the list in 2023
+    if 2023 in name_data['Year'].values:
+        # what was the ranking of the name in 2023
+        rank_2023 = name_data.loc[name_data['Year'] == 2023]['Rank'].values[0]
+        # how many of that name were there in 2023
+        number_2023 = name_data.loc[name_data['Year'] == 2023]['Number'].values[0]
+        
+        st.write(display_name + " was ranked " + rank_2023 + " in 2023 with " + number_2023 + "babies given this name.")
+    else:
+        # when was the last year the name was in the top 100
+        year_last = name_data['Year'].max()
+        # what was the ranking of the name in the last year
+        rank_last = name_data.loc[name_data['Year'] == last_year]['Rank'].values[0]
+
+        st.write(display_name+" was last in the top 100 in " + year_last + " when it was ranked " + rank_last + ".")
+
+    # average number of that name per year
+    mean = name_data['Number'].mean()
+
+    st.write("The average number of babies named " + display_name + " per year is " + mean + ".")
+
+    # it was most popular in which year
+    max_year = name_data.loc[name_data['Number'].idxmax()]['Year']
+
+    st.write(display_name + " was most popular in " + max_year + ".")
+
+    # what was the highest ranking of that name
+    max_rank = name_data.loc[name_data['Number'].idxmax()]['Rank']
+
+    st.write("When it was ranked " + max_rank + ".")
 
 with tab2:
     st.header(display_name+" over time")
+    # plot the name prevalence over time 
+    plt.figure()
+
+    fig, ax = plt.subplots()
+
+    ax.plot(name_data['Year'], name_data['Number'], color='black')
+
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number')
+    ax.legend()
+
+    st.pyplot(fig)
+
 
 with tab3:
     st.header("Predictions for "+display_name)
