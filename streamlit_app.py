@@ -146,7 +146,7 @@ with tab2:
 
 with tab3:
     st.header("Predictions for "+display_name)
-    # plot the name prevalence over time and the fit
+    # plot the name prevalence over time with the fit and prediction
     plt.figure()
 
     fig, ax = plt.subplots()
