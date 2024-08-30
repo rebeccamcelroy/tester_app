@@ -2,12 +2,10 @@
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.optimize import curve_fit
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, ExpSineSquared, WhiteKernel
 import streamlit as st
+import matplotlib.pyplot as plt
 
 
 ###### functions #######
@@ -50,6 +48,12 @@ def run_gaussian_process_regression(name_data, projection_years=20):
 
 ###### end functions ####### 
 
+###### app text ######
+
+st.header("Welcome to the name checker app!")
+st.subheader("Want to avoid your child or pet having the same name as everyone else's? You're in the right place.")
+st.text("This app allows you to check how popular a name is and whether it is likely to become more popular. Scroll down to input a name.")
+
 # read in the data
 file = 'popular_baby_names_1952_to_2023.csv'
 df = pd.read_csv(file)
@@ -62,37 +66,57 @@ grouped = df.groupby('Name')
 
 # what name do you want to check? 
 # ask the user to input a name
-name = input('What do you want to call your baby? ')
+name = st.text_input("What name do you want to use?", "George")
+st.write("The current name is", name)
 
-name = st.text_input(
-    "What name do you want to use?",
-    label_visibility=st.session_state.visibility,
-    disabled=st.session_state.disabled,
-    placeholder=st.session_state.placeholder,
-    )
+#gender = st.text_input("What gender statistics do you want to see?", "Male")
+#st.write("The current gender is", gender)
 
 # make the name lower case
 name = name.lower()
 
 # check if the name is in the list
 if name in grouped.groups:
-    print('That name is in our list - checking now!')
+    st.write('That name is in our list - checking now!')
 else:
-    print('That name isnt in the top 100, safe to use!')
+    st.write('That name isnt in the top 100, safe to use!')
 
 # get the data for the name
 name_data = grouped.get_group(name)
 
+# Alternatively, if you need to filter by both name and gender:
+#name_data = grouped[(grouped['Name'] == name) & (grouped['Gender'] == gender)]
+
 # run the gaussian process regression
 x_future, x_full, y_full_mean, y_full_sigma  = run_gaussian_process_regression(name_data)
 
-# plot the name prevalence over time and the fit
-plt.figure()
-sns.lineplot(x=name_data['Year'], y=name_data['Number'], label='Data')
-plt.plot(x_full, y_full_mean, 'b-', label='Prediction')
-plt.fill_between(x_full.ravel(), y_full_mean - 1.96 * y_full_sigma, 
-                  y_full_mean + 1.96 * y_full_sigma, alpha=0.2, color='blue')
-plt.xlabel('Year')
-plt.ylabel('Number')
-plt.legend()
-plt.show()
+tab1, tab2, tab3 = st.tabs(["Statistics", "Graph", "Predictions"])
+
+display_name = name.capitalize()
+
+with tab1:
+    st.header(display_name+" statistics")
+
+with tab2:
+    st.header(display_name+" over time")
+
+with tab3:
+    st.header("Predictions for "+display_name)
+    # plot the name prevalence over time and the fit
+    plt.figure()
+
+    fig, ax = plt.subplots()
+
+    ax.plot(name_data['Year'], name_data['Number'], label='Data', color='black')
+    ax.plot(x_full, y_full_mean, 'b-', label='Prediction')
+    ax.fill_between(x_full.ravel(), y_full_mean - 1.96 * y_full_sigma, 
+                y_full_mean + 1.96 * y_full_sigma, alpha=0.2, color='blue')
+
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Number')
+    ax.legend()
+
+    st.pyplot(fig)
+
+
+
