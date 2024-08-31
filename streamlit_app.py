@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 # - account for trailing spaces 
 # - if name isnt found ask whether they mean a similar name
 # - GP kernel sufficient?
+# - check what the average is doing - over all years or the ones it is in the dataset for?
 
 
 ###### functions #######
