@@ -63,7 +63,7 @@ st.subheader("Need to name a child? Want to know more about your name? You're in
 #st.markdown("As a Rebecca born in the 90s I am acutely aware of *how annoying* it can be to have an extremely common name. With this app you can check how **common prospective names are at the moment**, how common they were in the **past**, and whether they are about to be **trending**.")
 
 st.text("This app is mainted by Rebecca McElroy and uses census data from the NSW Government.")
-st.page_link("http://www.rebeccamcelroy.github.io", label="Homepage", icon="🏠"
+st.page_link("http://www.rebeccamcelroy.github.io", label="Homepage", icon="🏠")
 
 # read in the data
 file = 'popular_baby_names_1952_to_2023.csv'
