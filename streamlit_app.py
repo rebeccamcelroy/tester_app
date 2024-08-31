@@ -6,9 +6,6 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, ExpSineSquared, WhiteKernel, Matern
 import streamlit as st
 import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go
-
 
 
 ###### functions #######
