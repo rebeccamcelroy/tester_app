@@ -7,13 +7,11 @@ from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, ExpSineSq
 import streamlit as st
 import matplotlib.pyplot as plt
 
-"""" 
-TO DO:
-- implement a gender checker of some kind to catch names that appear in both gender lists 
-- add page for top 10 by year 
+ 
+# TO DO:
+# - implement a gender checker of some kind to catch names that appear in both gender lists 
+# - add page for top 10 by year 
 
-
-""""
 
 ###### functions #######
 
