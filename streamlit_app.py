@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 # - add page for top 10 by year 
 # - account for trailing spaces 
 # - if name isnt found ask whether they mean a similar name
+# - GP kernel sufficient?
 
 
 ###### functions #######
