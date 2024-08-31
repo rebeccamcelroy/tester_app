@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 # TO DO:
 # - implement a gender checker of some kind to catch names that appear in both gender lists 
 # - add page for top 10 by year 
+# - account for trailing spaces 
 
 
 ###### functions #######
