@@ -57,7 +57,7 @@ def run_gaussian_process_regression(name_data, projection_years=20):
 
 ###### app text ######
 
-st.title("Name Check App")
+st.title("Name Check 📈")
 st.header(":red[Welcome to the Name Check App!]")
 st.subheader("Need to name a child? Want to know more about your name? You're in the right place!")
 #st.markdown("As a Rebecca born in the 90s I am acutely aware of *how annoying* it can be to have an extremely common name. With this app you can check how **common prospective names are at the moment**, how common they were in the **past**, and whether they are about to be **trending**.")
