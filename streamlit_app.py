@@ -28,7 +28,7 @@ def run_gaussian_process_regression(name_data, projection_years=20):
     avg = np.median(y)
 
     # Define the kernel: Constant + RBF + Periodic + WhiteKernel (for noise)
-    kernel = avg + C(100, (100, 500)) * RBF(length_scale=30.0, length_scale_bounds=(10, 500))  + WhiteKernel(noise_level=1, noise_level_bounds=(1, 10))
+    kernel = avg + C(100, (100, 500)) * RBF(length_scale=50.0, length_scale_bounds=(10, 500))  + WhiteKernel(noise_level=1, noise_level_bounds=(1, 10))
 
 
     # Create GaussianProcessRegressor object
