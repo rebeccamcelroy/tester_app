@@ -214,7 +214,7 @@ if name in grouped.groups:
 
 
 else:
-    st.write('That name has never been in the top 100, it must be unique!!')
+    st.write('That name has never been in the top 100, it must be unique 😲')
 
 
 
