@@ -59,6 +59,7 @@ def run_gaussian_process_regression(name_data, projection_years=20):
 
 ###### app text ######
 
+st.set_page_config(page_title="Name Check 📈")
 st.title("Name Check 📈")
 st.header(":red[Welcome to the Name Check App!]")
 st.subheader("Need to name a child? Want to know more about your name? You're in the right place!")
