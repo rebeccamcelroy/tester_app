@@ -3,9 +3,12 @@
 import numpy as np
 import pandas as pd
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, ExpSineSquared, WhiteKernel
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, ExpSineSquared, WhiteKernel, Matern
 import streamlit as st
 import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
+
 
 
 ###### functions #######
@@ -15,14 +18,15 @@ def run_gaussian_process_regression(name_data, projection_years=20):
     X = name_data['Year'].values[::-1].reshape(-1, 1)
     y = name_data['Number'].values[::-1]
 
-    # Define the kernel: Constant * RBF
-    # kernel = C(1.0, (1e-4, 1e1)) * RBF(1, (1e-4, 1e1))
+    
 
-    # Define the kernel: Constant * RBF + ExpSineSquared
-    # kernel = C(1.0, (1e-4, 1e1)) * RBF(1, (1e-4, 1e1)) + ExpSineSquared(1.0, 5.0, (1e-4, 1e1), (1e-4, 1e1))
+    # Define kernel parameters
+    length_scale = 10.0
+    variance = y.std()
+    avg = np.median(y)
 
     # Define the kernel: Constant + RBF + Periodic + WhiteKernel (for noise)
-    kernel = C(1.0, (1e-4, 1e1)) + RBF(length_scale=1.0, length_scale_bounds=(1e-4, 1e1)) + ExpSineSquared(length_scale=1.0, periodicity=1.0, periodicity_bounds=(1e-2, 1e1)) + WhiteKernel(noise_level=1, noise_level_bounds=(1e-5, 1e1))
+    kernel = avg + C(100, (100, 500)) * RBF(length_scale=10.0, length_scale_bounds=(10, 500))  + WhiteKernel(noise_level=1, noise_level_bounds=(1, 10))
 
 
     # Create GaussianProcessRegressor object
@@ -50,9 +54,11 @@ def run_gaussian_process_regression(name_data, projection_years=20):
 
 ###### app text ######
 
-st.header("Welcome to the name checker app!")
-st.subheader("Want to avoid your child or pet having the same name as everyone else's? You're in the right place.")
-st.text("This app allows you to check how popular a name is and whether it is likely to become more popular. Scroll down to input a name.")
+st.header(":red[Welcome to the Name Checker App!]")
+st.subheader("Need to name a child? Want to know more about your name? You're in the right place!")
+st.markdown("As a Rebecca born in the 90s I am acutely aware of *how annoying* it can be to have an extremely common name. With this app you can check how **common prospective names are at the moment**, how common they were in the **past**, and whether they are about to be **trending**.")
+
+st.text("This analysis uses census data from the NSW Government.")
 
 # read in the data
 file = 'popular_baby_names_1952_to_2023.csv'
@@ -66,8 +72,8 @@ grouped = df.groupby('Name')
 
 # what name do you want to check? 
 # ask the user to input a name
-name = st.text_input("What name do you want to use?", "George")
-st.write("The current name is", name)
+name = st.text_input("What name do you want to use?", "James")
+st.write(f"The current name is :red[{name}]")
 
 #gender = st.text_input("What gender statistics do you want to see?", "Male")
 #st.write("The current gender is", gender)
@@ -77,9 +83,9 @@ name = name.lower()
 
 # check if the name is in the list
 if name in grouped.groups:
-    st.write('That name is in our list - checking now!')
+    st.write('That name is in the top 100. Scroll down for statistics, graphs, and predictions...')
 else:
-    st.write('That name isnt in the top 100, safe to use!')
+    st.write('That name is not in the top 100, safe to use!')
 
 # get the data for the name
 name_data = grouped.get_group(name)
@@ -93,9 +99,12 @@ x_future, x_full, y_full_mean, y_full_sigma  = run_gaussian_process_regression(n
 # recapitalise the name for output 
 display_name = name.capitalize()
 
+# use dark theme
+plt.style.use('dark_background')
+
 tab1, tab2, tab3 = st.tabs(["Statistics", "Graph", "Predictions"])
 with tab1:
-    st.header(display_name+" statistics")
+    st.header("Statistics")
     # get the stats for the selected name 
     # check whether the name made the list in 2023
     if 2023 in name_data['Year'].values:
@@ -104,29 +113,68 @@ with tab1:
         # how many of that name were there in 2023
         number_2023 = name_data.loc[name_data['Year'] == 2023]['Number'].values[0]
         
-        st.write(display_name + " was ranked " + rank_2023 + " in 2023 with " + number_2023 + "babies given this name.")
+        st.write(f":red[{display_name}] was ranked :red[{rank_2023}] in 2023, :red[{number_2023}] babies were called this." )
+
     else:
         # when was the last year the name was in the top 100
         year_last = name_data['Year'].max()
         # what was the ranking of the name in the last year
-        rank_last = name_data.loc[name_data['Year'] == last_year]['Rank'].values[0]
+        rank_last = name_data.loc[name_data['Year'] == year_last]['Rank'].values[0]
 
-        st.write(display_name+" was last in the top 100 in " + year_last + " when it was ranked " + rank_last + ".")
+        st.write(f":red[{display_name}] was last in the top 100 in {year_last} when it was ranked {rank_last}.")
 
-    # average number of that name per year
-    mean = name_data['Number'].mean()
+    # total number of babies with that name
+    total = name_data['Number'].sum()
 
-    st.write("The average number of babies named " + display_name + " per year is " + mean + ".")
+    # how many unique years are there in the dataset?
+    unique_years = name_data['Year'].nunique()
+
+    # average number of babies with that name per year
+    mean = total / unique_years
+
+    st.write(f"On average :red[{int(mean)}] babies were named :red[{display_name}] in NSW each year over the past {unique_years} years.")
 
     # it was most popular in which year
-    max_year = name_data.loc[name_data['Number'].idxmax()]['Year']
-
-    st.write(display_name + " was most popular in " + max_year + ".")
-
+    max_year = name_data.loc[name_data['Rank'].idxmin()]['Year']
     # what was the highest ranking of that name
-    max_rank = name_data.loc[name_data['Number'].idxmax()]['Rank']
+    max_rank = name_data.loc[name_data['Rank'].idxmin()]['Rank']
 
-    st.write("When it was ranked " + max_rank + ".")
+    st.write(f":red[{display_name}] was most popular in {max_year}, when it was ranked {max_rank}.")
+
+    # future stats
+    # what does the model think 
+
+    if 2023 in name_data['Year'].values:
+        st.write(f":red[Warning, prediction optimizer under construction:]")
+            # future stats
+        # how many babies are predicted to be named that in 2033
+        future_number = y_full_mean[-10]
+
+        # difference between 2023 and 2033
+        ratio = future_number/number_2023
+
+        # what does this ratio mean?
+        # if ratio is approximately 1 then the name is likely to stay the same
+        # if ratio is less than 1 then the name is likely to decrease in popularity
+        # if ratio is greater than 1 then the name is likely to increase in popularity
+
+        if ratio > 0.9 and ratio < 1.1:
+            st.write(f"The number of babies named {display_name} in the future is likely to stay about the same.")
+
+        elif ratio < 0.9:
+            st.write(f"The number of babies named :red[{display_name}] in the future is likely to decrease.")
+
+        elif ratio > 1.1:
+            st.write(f"The number of babies named :red[{display_name}] in the future is likely to increase.")
+
+        st.write(f":red[R = {ratio}]")
+
+    else:
+        st.write(f":red[{display_name}] wasn't in the top 100 names last year, so it is safe to use. ")
+
+
+             
+
 
 with tab2:
     st.header(display_name+" over time")
@@ -135,32 +183,47 @@ with tab2:
 
     fig, ax = plt.subplots()
 
-    ax.plot(name_data['Year'], name_data['Number'], color='black')
+    ax.plot(name_data['Year'], name_data['Number'], color='white')
 
     ax.set_xlabel('Year')
     ax.set_ylabel('Number')
-    ax.legend()
 
     st.pyplot(fig)
 
 
 with tab3:
+
     st.header("Predictions for "+display_name)
     # plot the name prevalence over time with the fit and prediction
     plt.figure()
 
     fig, ax = plt.subplots()
 
-    ax.plot(name_data['Year'], name_data['Number'], label='Data', color='black')
-    ax.plot(x_full, y_full_mean, 'b-', label='Prediction')
-    ax.fill_between(x_full.ravel(), y_full_mean - 1.96 * y_full_sigma, 
-                y_full_mean + 1.96 * y_full_sigma, alpha=0.2, color='blue')
+    ax.plot(name_data['Year'], name_data['Number'], label='Data', color='white')
+    ax.plot(x_full, y_full_mean, 'lightcoral', label='Prediction')
+    #ax.fill_between(x_full.ravel(), y_full_mean - 1.96 * y_full_sigma, 
+    #            y_full_mean + 1.96 * y_full_sigma, alpha=0.2, color='blue')
 
     ax.set_xlabel('Year')
     ax.set_ylabel('Number')
     ax.legend()
 
     st.pyplot(fig)
+
+# with tab4:
+#     st.header("Predictions for "+display_name)
+#     # plot the name prevalence over time with the fit and prediction
+#     #fig = px.line(name_data, x='Year', y="Number")
+
+#     fig = go.Figure()
+
+#     fig = px.line(name_data, x='Year', y='Number')
+
+#     fig.add_scatter(x=x_full, y=y_full_mean, name='Model', mode='lines')
+
+#     st.plotly_chart(fig, theme="streamlit")
+
+
 
 
 
