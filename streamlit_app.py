@@ -157,7 +157,7 @@ with tab_check:
             # what does the model think 
                 
             if 2023 in name_data['Year'].values:
-                st.write(f"⚠️ :red[Warning, prediction optimizer under construction:]")
+                st.write(f"⚠️ :red[Warning, prediction optimizer in flux:]")
                     # future stats
                 # how many babies are predicted to be named that in 2033
                 future_number = y_full_mean[-10]
