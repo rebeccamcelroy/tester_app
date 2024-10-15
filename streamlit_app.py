@@ -299,10 +299,10 @@ with tab_us:
 
         # names are in first column
         # make all the names lower case
-        df[0] = df[0].str.lower()
+        df_us[0] = df_us[0].str.lower()
 
         # group the data 
-        grouped = df.groupby('Name')
+        grouped = df_us.groupby('Name')
 
         # what name do you want to check? 
         # ask the user to input a name
@@ -362,10 +362,10 @@ with tab_us:
                 unique_years = name_data['Year'].nunique()
 
                 # average number of babies with that name per year
-                n_years = 72 # 1952-2023
-                mean = total / 72 
+                n_years = 2023-1880 # 1952-2023
+                mean = total / n_years
 
-                st.write(f"On average :red[{int(mean)}] babies were named :red[{display_name}] in NSW each year over the past {n_years} years.")
+                st.write(f"On average :red[{int(mean)}] babies were named :red[{display_name}] in the US each year over the past {n_years} years.")
 
                 # it was most popular in which year
                 max_year = name_data.loc[name_data['Rank'].idxmin()]['Year']
@@ -481,6 +481,10 @@ with tab_us:
         with tab_male:
             st.write(f"Top 10 male names for the year {year_select}")
             st.dataframe(df_male_top[['Rank', 'Name', 'Number']], hide_index=True) 
+
+    with tab_pick:
+
+        st.write("WIP - we will pick a random uncommon name for you to consider")
 
 
 # with tab4:
