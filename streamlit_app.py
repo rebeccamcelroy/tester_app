@@ -299,7 +299,7 @@ with tab_us:
 
         # names are in first column
         # make all the names lower case
-        df_us[0] = df_us[0].str.lower()
+        df_us['Name'] = df_us['Name'].str.lower()
 
         # group the data 
         grouped = df_us.groupby('Name')
