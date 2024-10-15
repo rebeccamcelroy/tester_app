@@ -306,7 +306,7 @@ with tab_us:
 
         # what name do you want to check? 
         # ask the user to input a name
-        name = st.text_input("What name do you want to check?", "James")
+        name = st.text_input("What name do you want to check?", "Harvey")
         st.write(f"Currently checking :red[{name}]")
 
         #gender = st.text_input("What gender statistics do you want to see?", "Male")
