@@ -340,8 +340,15 @@ with tab_us:
                 # get the stats for the selected name 
                 # check whether the name made the list in 2023
                 if 2023 in name_data['Year'].values:
-                    # what was the ranking of the name in 2023
-                    rank_2023 = name_data.loc[name_data['Year'] == 2023]['Rank'].values[0]
+                    # calculate the ranking of the name in 2023
+                    # isolate name data for 2023
+                    name_data_2023 = name_data[name_data['Year'] == 2023]
+                    # sort by number 
+                    name_data_2023 = name_data_2023.sort_values('Number', ascending=True)
+                    # keep the top 100
+                    # name_data_2023 = name_data_2023.head(100)
+                    # what index is the name in the list 
+                    rank_2023 = name_data_2023.index[0] + 1
                     # how many of that name were there in 2023
                     number_2023 = name_data.loc[name_data['Year'] == 2023]['Number'].values[0]
                     
@@ -351,9 +358,9 @@ with tab_us:
                     # when was the last year the name was in the top 100
                     year_last = name_data['Year'].max()
                     # what was the ranking of the name in the last year
-                    rank_last = name_data.loc[name_data['Year'] == year_last]['Rank'].values[0]
+                    # rank_last = name_data.loc[name_data['Year'] == year_last]['Rank'].values[0]
                 
-                    st.write(f":red[{display_name}] was last in the top 100 in {year_last} when it was ranked {rank_last}.")
+                    st.write(f":red[{display_name}] was last in the top 1000 in {year_last}")
                 
                 # total number of babies with that name
                 total = name_data['Number'].sum()
@@ -368,11 +375,11 @@ with tab_us:
                 st.write(f"On average :red[{int(mean)}] babies were named :red[{display_name}] in the US each year over the past {n_years} years.")
 
                 # it was most popular in which year
-                max_year = name_data.loc[name_data['Rank'].idxmin()]['Year']
+                max_year = name_data.loc[name_data['Number'].idxmin()]['Year']
                 # what was the highest ranking of that name
-                max_rank = name_data.loc[name_data['Rank'].idxmin()]['Rank']
+                # max_ = name_data.loc[name_data['Rank'].idxmin()]['Rank']
                 
-                st.write(f":red[{display_name}] was most popular in {max_year}, when it was ranked {max_rank}.")
+                st.write(f":red[{display_name}] was most popular in {max_year}.")
                 
                 # future stats
                 # what does the model think 
