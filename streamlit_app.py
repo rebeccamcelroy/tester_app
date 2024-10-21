@@ -87,14 +87,14 @@ for i in range(1880, 2024):
     # keep only the top 1000 female names
     df_female = df_temp.head(1000)
     # add a column for rank
-    df_female['Rank'] = (df_female.index + 1) % 1000
+    df_female['Rank'] = np.arange(1, 1001)
 
     # select out the male names
     df_male = df_temp[df_temp[1] == 'M']
     # keep only the top 1000 male names
     df_male = df_male.head(1000)
     # add a column for rank
-    df_male['Rank'] = (df_male.index + 1) % 1000
+    df_male['Rank'] = np.arange(1, 1001)
 
     # combine the two dataframes
     df_temp = pd.concat([df_female, df_male])
