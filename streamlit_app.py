@@ -66,7 +66,7 @@ st.header(":red[Welcome to the Name Check App!]")
 st.subheader("Need to name a child? Want to know more about your name? You're in the right place!")
 #st.markdown("As a Rebecca born in the 90s I am acutely aware of *how annoying* it can be to have an extremely common name. With this app you can check how **common prospective names are at the moment**, how common they were in the **past**, and whether they are about to be **trending**.")
 
-st.text("This app is maintained by Rebecca McElroy and uses census data from the NSW Government.")
+st.text("This app is maintained by R. McElroy and uses census data from the NSW & US Government.")
 st.page_link("https://rebeccamcelroy.github.io/", label="Rebecca's Homepage", icon="🏠")
 
 # read in the aus data
@@ -512,42 +512,56 @@ with tab_us:
         # are you looking for a male or female name?
         gender = st.radio("Do you want a typically male or female name?", ["Male", "Female"])
 
-        # only keep the first letter of the gender
-        gender = gender[0]
 
         # select a random name from the list
-        if gender == 'M':
+        if gender == 'Male':
 
             # select male names
             df_male = df_us[df_us['Gender'] == 'M']
 
             # how many unique names?
-            length = len(df_male['Name'].unique())
+            unique_names = df_male['Name'].unique()
+
+            length = len(unique_names)
 
             # get a random number between 0 and length
-            random_number = np.random.randint(0, length)
+            random_n1 = np.random.randint(0, length)
+            random_n2 = np.random.randint(0, length)
+            random_n3 = np.random.randint(0, length)
 
             # select the name at that index
-            random_name = df_male['Name'].unique()[random_number]
+            random_name1 = unique_names[random_n1]
+            random_name2 = unique_names[random_n2]
+            random_name3 = unique_names[random_n3]
 
-        elif gender == 'F':
+        if gender == 'Female':
 
             # select male names
             df_female = df_us[df_us['Gender'] == 'F']
 
             # how many unique names?
-            length = len(df_female['Name'].unique())
+            unique_names = df_female['Name'].unique()
+
+            length = len(unique_names)
 
             # get a random number between 0 and length
-            random_number = np.random.randint(0, length)
+            random_n1 = np.random.randint(0, length)
+            random_n2 = np.random.randint(0, length)
+            random_n3 = np.random.randint(0, length)
 
             # select the name at that index
-            random_name = df_female['Name'].unique()[random_number]
+            random_name1 = unique_names[random_n1]
+            random_name2 = unique_names[random_n2]
+            random_name3 = unique_names[random_n3]
+            
 
         # capitalise the name
-        random_name = random_name.capitalize()
+        random_name1 = random_name1.capitalize()
+        random_name2 = random_name2.capitalize()
+        random_name3 = random_name3.capitalize()
+
             
-        st.write(f"How about: {random_name}?")
+        st.write(f"How about: {random_name1}, {random_name2}, or {random_name3}?")
 
 
 # with tab4:
