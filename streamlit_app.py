@@ -507,7 +507,7 @@ with tab_us:
 
     with tab_pick:
 
-        st.write("WIP - we will pick a random uncommon name for you to consider")
+        st.write("We will pick a random name for you to consider...")
         
         # are you looking for a male or female name?
         gender = st.radio("Do you want a typically male or female name?", ["Male", "Female"])
