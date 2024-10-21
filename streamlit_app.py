@@ -352,8 +352,8 @@ with tab_us:
             # use dark theme
             plt.style.use('dark_background')
 
-            tab1, tab2, tab3 = st.tabs(["Statistics", "Graph", "Predictions"])
-            with tab1:
+            tab4, tab5, tab6 = st.tabs(["Statistics", "Graph", "Predictions"])
+            with tab4:
                 st.header("Statistics")
                 # get the stats for the selected name 
                 # check whether the name made the list in 2023
@@ -430,7 +430,7 @@ with tab_us:
                         
 
 
-            with tab2:
+            with tab5:
                 st.header(display_name+" over time")
                 # plot the name prevalence over time 
                 plt.figure()
@@ -445,7 +445,7 @@ with tab_us:
                 st.pyplot(fig)
 
 
-            with tab3:
+            with tab6:
                 
                 st.header("Predictions for "+display_name)
                 # plot the name prevalence over time with the fit and prediction
