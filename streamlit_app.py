@@ -96,8 +96,6 @@ for i in range(1880, 2024):
 
     n += 1
 
-stop
-
 # change the names of the columns
 # Name, Gender, Number, Year
 df_us.rename(columns = {df_us.columns[0]: 'Name'}, inplace=True)
