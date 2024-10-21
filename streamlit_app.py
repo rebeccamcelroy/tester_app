@@ -84,6 +84,9 @@ for i in range(1880, 2024):
     # add the year to the dataframe
     df_temp['Year'] = i
 
+    # add the index modulo 1000 to the dataframe
+    df_temp['Rank'] = (df_temp.index + 1) % 1000
+
     # add the data to the main dataframe
     if n == 0:
         df_us = df_temp
@@ -92,6 +95,8 @@ for i in range(1880, 2024):
         df_us = pd.concat([df_us, df_temp])
 
     n += 1
+
+stop
 
 # change the names of the columns
 # Name, Gender, Number, Year
@@ -343,13 +348,9 @@ with tab_us:
                     # calculate the ranking of the name in 2023
                     # isolate name data for 2023
                     name_data_2023 = name_data[name_data['Year'] == 2023]
-                    # sort by number 
-                    name_data_2023 = name_data_2023.sort_values('Number', ascending=True)
-                    # keep the top 100
-                    # name_data_2023 = name_data_2023.head(100)
-                    # what index is the name in the list 
-                    rank_2023 = name_data_2023.index[0] + 1
-                    # how many of that name were there in 2023
+                    # calculate the rank of the name in 2023
+                    rank_2023 = name_data_2023['Rank'].values[0]
+                    # calculate the number of babies with that name in 2023
                     number_2023 = name_data.loc[name_data['Year'] == 2023]['Number'].values[0]
                     
                     st.write(f":red[{display_name}] was ranked :red[{rank_2023}] in 2023, :red[{number_2023}] babies were called this." )
@@ -358,9 +359,9 @@ with tab_us:
                     # when was the last year the name was in the top 100
                     year_last = name_data['Year'].max()
                     # what was the ranking of the name in the last year
-                    # rank_last = name_data.loc[name_data['Year'] == year_last]['Rank'].values[0]
+                    rank_last = name_data.loc[name_data['Year'] == year_last]['Rank'].values[0]
                 
-                    st.write(f":red[{display_name}] was last in the top 1000 in {year_last}")
+                    st.write(f":red[{display_name}] was last in the top 1000 in {year_last} when it was ranked {rank_last}.")
                 
                 # total number of babies with that name
                 total = name_data['Number'].sum()
