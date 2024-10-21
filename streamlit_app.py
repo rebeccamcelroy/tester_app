@@ -533,16 +533,19 @@ with tab_us:
         elif gender == 'F':
 
             # select male names
-            df_male = df_us[df_us['Gender'] == 'M']
+            df_female = df_us[df_us['Gender'] == 'F']
 
             # how many unique names?
-            length = len(df_male['Name'].unique())
+            length = len(df_female['Name'].unique())
 
             # get a random number between 0 and length
             random_number = np.random.randint(0, length)
 
             # select the name at that index
-            random_name = df_male['Name'].unique()[random_number]
+            random_name = df_female['Name'].unique()[random_number]
+
+        # capitalise the name
+        random_name = random_name.capitalize
             
         st.write(f"How about: {random_name}?")
 
