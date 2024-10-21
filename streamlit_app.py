@@ -366,7 +366,7 @@ with tab_us:
                     # calculate the number of babies with that name in 2023
                     number_2023 = name_data.loc[name_data['Year'] == 2023]['Number'].values[0]
                     
-                    st.write(f":red[{display_name}] was ranked :red[{rank_2023}] in 2023, :red[{number_2023}] babies were called this." )
+                    st.write(f":red[{display_name}] was ranked :red[{rank_2023}] in 2023 :red[{number_2023}] babies were called this." )
                 
                 else:
                     # when was the last year the name was in the top 100
