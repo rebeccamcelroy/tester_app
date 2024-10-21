@@ -470,19 +470,17 @@ with tab_us:
 
     with tab_history: 
 
-        file = 'popular_baby_names_1952_to_2023.csv'
-
-        year_select = st.text_input("What year do you want to check?", "2023")
-        st.write(f"Currently checking :red[{year_select}]")
+        year_select_us = st.text_input("What year do you want to check?", "2022")
+        st.write(f"Currently checking :red[{year_select_us}]")
 
         # split the data into male and female
-        df_male = df[df['Gender'] == 'Male']
-        df_female = df[df['Gender'] == 'Female']
+        df_male = df_us[df_us['Gender'] == 'M']
+        df_female = df_us[df_us['Gender'] == 'F']
 
 
         # grab the top 10 male names for the selected year
-        df_male_top = df_male[df_male['Year'] == int(year_select)]
-        df_female_top = df_female[df_female['Year'] == int(year_select)]
+        df_male_top = df_male[df_male['Year'] == int(year_select_us)]
+        df_female_top = df_female[df_female['Year'] == int(year_select_us)]
 
         df_male_top = df_male_top.sort_values('Rank', ascending=True)
         df_female_top = df_female_top.sort_values('Rank', ascending=True)
@@ -496,11 +494,11 @@ with tab_us:
         with tab_female:
 
             # display the top ten names 
-            st.write(f"Top 10 female names for the year {year_select}")
+            st.write(f"Top 10 female names for the year {year_select_us}")
             st.dataframe(df_female_top[['Rank', 'Name', 'Number']], hide_index=True) 
 
         with tab_male:
-            st.write(f"Top 10 male names for the year {year_select}")
+            st.write(f"Top 10 male names for the year {year_select_us}")
             st.dataframe(df_male_top[['Rank', 'Name', 'Number']], hide_index=True) 
 
     with tab_pick:
