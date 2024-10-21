@@ -508,6 +508,43 @@ with tab_us:
     with tab_pick:
 
         st.write("WIP - we will pick a random uncommon name for you to consider")
+        
+        # are you looking for a male or female name?
+        gender = st.radio("Do you want a typically male or female name?", ["Male", "Female"])
+
+        # only keep the first letter of the gender
+        gender = gender[0]
+
+        # select a random name from the list
+        if gender == 'M':
+
+            # select male names
+            df_male = df_us[df_us['Gender'] == 'M']
+
+            # how many unique names?
+            length = len(df_male['Name'].unique())
+
+            # get a random number between 0 and length
+            random_number = np.random.randint(0, length)
+
+            # select the name at that index
+            random_name = df_male['Name'].unique()[random_number]
+
+        elif gender == 'F':
+
+            # select male names
+            df_male = df_us[df_us['Gender'] == 'M']
+
+            # how many unique names?
+            length = len(df_male['Name'].unique())
+
+            # get a random number between 0 and length
+            random_number = np.random.randint(0, length)
+
+            # select the name at that index
+            random_name = df_male['Name'].unique()[random_number]
+            
+        st.write(f"How about: {random_name}?")
 
 
 # with tab4:
