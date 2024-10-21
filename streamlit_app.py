@@ -84,9 +84,21 @@ for i in range(1880, 2024):
     # add the year to the dataframe
     df_temp['Year'] = i
 
-    # add the index modulo 1000 to the dataframe
-    df_temp['Rank'] = (df_temp.index + 1) % 1000
+    # keep only the top 1000 female names
+    df_female = df_temp.head(1000)
+    # add a column for rank
+    df_female['Rank'] = (df_female.index + 1) % 1000
 
+    # select out the male names
+    df_male = df_temp[df_temp[1] == 'M']
+    # keep only the top 1000 male names
+    df_male = df_male.head(1000)
+    # add a column for rank
+    df_male['Rank'] = (df_male.index + 1) % 1000
+
+    # combine the two dataframes
+    df_temp = pd.concat([df_female, df_male])
+    
     # add the data to the main dataframe
     if n == 0:
         df_us = df_temp
@@ -96,11 +108,14 @@ for i in range(1880, 2024):
 
     n += 1
 
+
 # change the names of the columns
 # Name, Gender, Number, Year
 df_us.rename(columns = {df_us.columns[0]: 'Name'}, inplace=True)
 df_us.rename(columns = {df_us.columns[1]: 'Gender'}, inplace=True)
 df_us.rename(columns = {df_us.columns[2]: 'Number'}, inplace=True)
+
+
 
 tab_aus, tab_us = st.tabs(["Australia - NSW", "USA"])
 
