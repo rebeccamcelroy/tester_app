@@ -545,7 +545,7 @@ with tab_us:
             random_name = df_female['Name'].unique()[random_number]
 
         # capitalise the name
-        random_name = random_name.capitalize
+        random_name = random_name.capitalize()
             
         st.write(f"How about: {random_name}?")
 
